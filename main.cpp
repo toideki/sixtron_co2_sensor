@@ -5,55 +5,56 @@
 
 #include "mbed.h"
 
-#include "inc/SCD4x_driver.hpp"
+//#include "inc/SCD4x_driver.hpp"
 
 // Blinking rate in milliseconds
-#define POLLING_RATE 5000ms
-#define I2C_ADDRESS (0x62 << 1)
-#define START_PERIOD_MEASURE_BYTE1      (0x21)
-#define START_PERIOD_MEASURE_BYTE2      (0xB1)
-#define READ_SENSOR_BYTE1               (0xEC)
-#define READ_SENSOR_BYTE2               (0x05)
+#define POLLING_RATE    5000ms
+#define PRINT_NUM       (100)
 
+DigitalOut led1(LED1);
+DigitalOut led2(LED2);
 
-int main() {
-    // Initialize the driver
-    SCD4x_driver SCD4x(P1_I2C_SDA, P1_I2C_SCL, 0x62);
+Mutex mutex_pp;
 
-    // Start periodic measurement
-    SCD4x.startMeasurement();
+Thread thread1(osPriorityNormal, 1024, nullptr, nullptr);
+Thread thread2(osPriorityNormal, 1024, nullptr, nullptr);
 
-    while (1) {
-        printf("Read measure\n\r");
-
-        if (!SCD4x.readData()) {
-            printf("Co2 is %ld ppm\n\rTemp is %ld°C\n\rHumid is %ld %%\n\r", 
-                   SCD4x.getCO2(), SCD4x.getTemperature(), SCD4x.getHumidity());
+void ping_thread() {
+    int i = PRINT_NUM;
+    while (--i > 0) {
+        {
+            mutex_pp.lock();
+            printf("Ping\n\r");
+            mutex_pp.unlock();
         }
-
-        ThisThread::sleep_for(5000ms);
+        //mutex_pp.unlock();
+        ThisThread::sleep_for(1000ms);
+    }
+}
+ 
+void pong_thread() {
+    int i = PRINT_NUM;
+    while (--i > 0) {
+        {
+            mutex_pp.lock();
+            printf("Pong\n\r");
+            mutex_pp.unlock();
+        }
+        ThisThread::sleep_for(1000ms);
     }
 }
 
+int main() {
+    thread2.start(pong_thread);
+    thread1.start(ping_thread);
 
-//#include "mbed.h"
-//I2C i2c(I2C_SDA , I2C_SCL);
-//const int addr7bit = 0x48;      // 7-bit I2C address
-//const int addr8bit = 0x48 << 1; // 8-bit I2C address, 0x90
-//int main() {
-//    char cmd[2];
-//    while (1) {
-//        cmd[0] = 0x01;
-//        cmd[1] = 0x00;
-//        // read and write takes the 8-bit version of the address.
-//        // set up configuration register (at 0x01)
-//        i2c.write(addr8bit, cmd, 2);
-//        ThisThread::sleep_for(500);
-//        // read temperature register
-//        cmd[0] = 0x00;
-//        i2c.write(addr8bit, cmd, 1);
-//        i2c.read( addr8bit, cmd, 2);
-//        float tmp = (float((cmd[0]<<8)|cmd[1]) / 256.0);
-//        printf("Temp = %.2f\n", tmp);
-//  }
-//}
+    while(1)
+    {
+        led1 = !led1;
+        mutex_pp.trylock();
+        printf("Alive!\n\r");
+        mutex_pp.unlock();
+        ThisThread::sleep_for(5000ms);
+    }
+    return 0;
+}
