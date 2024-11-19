@@ -1,6 +1,3 @@
-# Copyright (c) 2020 ARM Limited. All rights reserved.
-# SPDX-License-Identifier: Apache-2.0
-
 cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 
 set(MBED_PATH ${CMAKE_CURRENT_SOURCE_DIR}/mbed-os CACHE INTERNAL "")
@@ -18,6 +15,12 @@ add_executable(${APP_TARGET})
 target_sources(${APP_TARGET}
     PRIVATE
         main.cpp
+        src/SCD4x_driver.cpp # Add SensorDriver.cpp to the compilation sources
+)
+
+target_include_directories(${APP_TARGET}
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/inc # Ensure the compiler can find SensorDriver.hpp
 )
 
 target_link_libraries(${APP_TARGET}

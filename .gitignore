@@ -5,3 +5,5 @@ projectfiles
 BUILD
 mbed-os
 mbed_zest-core-fmlr-72
+.vscode
+mbed_virtual

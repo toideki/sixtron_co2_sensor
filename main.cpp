@@ -5,6 +5,8 @@
 
 #include "mbed.h"
 
+#include "inc/SCD4x_driver.hpp"
+
 // Blinking rate in milliseconds
 #define POLLING_RATE 5000ms
 #define I2C_ADDRESS (0x62 << 1)
@@ -13,41 +15,23 @@
 #define READ_SENSOR_BYTE1               (0xEC)
 #define READ_SENSOR_BYTE2               (0x05)
 
-I2C i2c(P1_I2C_SDA , P1_I2C_SCL);
 
-int main()
-{
-    int ret = 0;
-    char start_period_cmd[2] = {START_PERIOD_MEASURE_BYTE1, START_PERIOD_MEASURE_BYTE2};
-    char read_sensor_cmd[2] = {READ_SENSOR_BYTE1, READ_SENSOR_BYTE2};
-    char read_data_buffer[3];
+int main() {
+    // Initialize the driver
+    SCD4x_driver SCD4x(P1_I2C_SDA, P1_I2C_SCL, 0x62);
 
-    int data = 0;
+    // Start periodic measurement
+    SCD4x.startMeasurement();
 
-    ret = i2c.write (I2C_ADDRESS, start_period_cmd, 2, false);
-    if (ret != 0)
-        printf("I2C Start measure error: %d\n\r", ret);
-
-    while (1)
-    {
+    while (1) {
         printf("Read measure\n\r");
-        ret = i2c.write(I2C_ADDRESS, read_sensor_cmd, 2, true);
 
-        if(ret != 0)
-            printf("I2C Write Error: %d\n\r", ret);
-
-        if (ret == 0)
-        {
-            ret = i2c.read( I2C_ADDRESS, read_data_buffer, 3);
-            data = (read_data_buffer[0]<<8) | (read_data_buffer[1]<<0);
-            if (ret == 0)
-                printf("Data is %d, 0x%04x ppm\n\r", data, data);
-            else
-                printf("I2C Read Error: %d\n\r", ret);
+        if (!SCD4x.readData()) {
+            printf("Co2 is %ld ppm\n\rTemp is %ld°C\n\rHumid is %ld %%\n\r", 
+                   SCD4x.getCO2(), SCD4x.getTemperature(), SCD4x.getHumidity());
         }
-            
 
-        ThisThread::sleep_for(POLLING_RATE);
+        ThisThread::sleep_for(5000ms);
     }
 }
 
