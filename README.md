@@ -13,13 +13,8 @@
 ```bash
     cd sixtron_co2_sensor/
 ```
-### 1. Déployer les dépendances du projet
-Dans un terminal, placez-vous dans le dossier du projet cloné, puis exécutez :  
 
-```bash
-    mbed deploy
-```
-### 2. Créer un environnement virtuel Python ( Au besoins)
+### 1. Créer un environnement virtuel Python 
 
 Créez un environnement virtuel pour isoler les dépendances Python :
 
@@ -30,6 +25,13 @@ Activez l'environnement virtuel :
 ```bash
     source mbed_virtual/bin/activate
 ```
+### 2. Déployer les dépendances du projet
+Dans un terminal, placez-vous dans le dossier du projet cloné, puis exécutez :  
+
+```bash
+    mbed deploy
+```
+
 ### 3. Configurer la cible et la chaîne d'outils Mbed
 
 Définissez la cible matérielle et la chaîne d'outils à utiliser :
@@ -38,32 +40,51 @@ Définissez la cible matérielle et la chaîne d'outils à utiliser :
     mbed target ZEST_CORE_FMLR-72 && mbed toolchain GCC_ARM
 ```
 
-# 6. Compiler le projet
+# 4. Compiler le projet
 
 Compilez le projet avec la commande suivante :
 ```bash
     mbed compile
 ```
-# 7. Flasher le programme sur la carte
+# 5. Flasher le programme sur la carte
 
 Téléchargez le programme sur la carte :
 ```bash
     sixtron_flash
 ```
-# 8. Lancer la communication série avec la carte
+# 6. Lancer la communication série avec la carte
 
 Pour lire les messages ou interagir avec la carte, ouvrez une communication série :
 
 ```bash
-    minicom -b 9600 -D /dev/ttyUSBX 
+    minicom -b 9600 -D /dev/ttyUSB0
 ```
+### MODIFICATION DU CMAKELIST
+    changement du cmakelist pour convertir a l'architecture actuel.
+
+    target_sources(${APP_TARGET}
+        PRIVATE
+            src/src/main.cpp
+            src/driver/src/SCD4x_driver.cpp 
+    )
+
+    target_include_directories(${APP_TARGET}
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/include 
+            ${CMAKE_CURRENT_SOURCE_DIR}/mbed_6tron-courses_lorawan
+    )
 
 # EXERCICE 1 : Contrôle d'une LED avec une interruption sur bouton
 
 Cet exercice utilise la bibliothèque **Mbed OS** pour contrôler une LED en réponse à un bouton poussoir. Le code utilise des interruptions pour basculer l'état d'une LED à chaque appui ou relâchement du bouton. 
 
 ## Commande pour l'utilisation
-    
+
+    ```bash
+        git checkout 5a1f0645603a5c6a62e75e75ee297aef43a54de7
+    ```
+    recompiler puis flasher
+
 ## Fonctionnement du code 
 
 1. **Initialisation des objets :**
@@ -81,6 +102,12 @@ Cet exercice utilise la bibliothèque **Mbed OS** pour contrôler une LED en ré
 # EXERCICE 2 : Mesure du temps d'appui sur un bouton avec affichage et contrôle de LED
 
 Cet exercice utilise **Mbed OS** pour mesurer la durée d'appui sur un bouton. En parallèle, une LED change d'état au début et à la fin de l'appui. La durée est affichée sur la console à l'aide d'un `printf`.
+## Commande pour l'utilisation
+
+    ```bash
+        git checkout 3f26727a4a0f30e2351e257610859fc54524bbbd
+    ```
+    recompiler puis flasher
 
 ## Fonctionnement
 
@@ -113,6 +140,13 @@ Cet exercice utilise **Mbed OS** pour mesurer la durée d'appui sur un bouton. E
 # EXERCICE 3 : Modification de la fréquence de clignotement d'une LED via un bouton
 
 Cet exercice utilise la bibliothèque **Mbed OS** pour contrôler une LED. La fréquence de clignotement de la LED est modifiée à chaque appui sur un bouton, grâce à l'utilisation d'un **Ticker**.
+## Commande pour l'utilisation
+
+    ```bash
+        git checkout 21284cf032f70a87e7fc2a2561e81fb21874cf93
+    ```
+    recompiler puis flasher
+
 
 ## Fonctionnement du code 
 
@@ -151,6 +185,12 @@ Cet exercice utilise la bibliothèque **Mbed OS** pour contrôler une LED. La fr
 # EXERCICE 4 : Lecture de données depuis un capteur de CO2 via I2C
 
 Cet exercice utilise la bibliothèque **Mbed OS** pour lire des données provenant d'un capteur de CO2 connecté via un bus I2C. Le programme configure le capteur pour effectuer des mesures périodiques et récupère les concentrations de CO2 en boucle.
+## Commande pour l'utilisation
+
+    ```bash
+        git checkout 7807ba815f0b0eb943fd6892a2dd81c1d42a8085
+    ```
+    recompiler puis flasher
 
 ## Fonctionnement du code
 
@@ -192,6 +232,13 @@ Cet exercice utilise la bibliothèque **Mbed OS** pour lire des données provena
 # EXERCICE 5 : Driver pour un capteur de CO2 SCD4x avec lecture I2C
 
 Cet exercice utilise la bibliothèque **Mbed OS** pour interfacer un capteur de CO2 SCD4x via un bus I2C. Le programme est structuré autour d'une classe **SCD4x_driver**, qui gère les communications avec le capteur et permet d'obtenir des mesures de CO2, de température et d'humidité.
+
+## Commande pour l'utilisation
+
+    ```bash
+        git checkout c74eef47dff84fd465ee51430a353a13dfcdf435
+    ```
+    recompiler puis flasher
 
 ## Fonctionnement du code 
 
@@ -238,6 +285,12 @@ Cet exercice utilise la bibliothèque **Mbed OS** pour interfacer un capteur de 
 # EXERCICE 6 : Synchronisation de threads avec Mutex et clignotement de LED
 
 Cet exercice utilise **Mbed OS** pour démontrer la gestion de threads synchronisés à l'aide d'un mutex. Deux threads exécutent des tâches concurrentes ("Ping" et "Pong"), tandis que le thread principal clignote une LED et signale son activité via un message.
+## Commande pour l'utilisation
+
+    ```bash
+        git checkout 8e9b69456fb6545146b3470f1f7b0d018513e0ce
+    ```
+    recompiler puis flasher
 
 ## Fonctionnement du code 
 
@@ -283,7 +336,13 @@ Cet exercice utilise **Mbed OS** pour démontrer la gestion de threads synchroni
 # PROJET FINAL : Intégration d'un capteur CO₂ avec LoRaWAN et Mbed OS
 
 Cet exercice combine un capteur SCD4x pour mesurer le CO₂, la température et l'humidité, avec LoRaWAN pour transmettre les données collectées à un réseau distant. Le tout est implémenté à l'aide de Mbed OS.
+## Commande pour l'utilisation
 
+  ```bash
+     git checkout main
+
+  ```
+    recompiler puis flasher
 ## Structure des fichiers du projet
       src
       ├── driver
@@ -353,7 +412,6 @@ Cet exercice combine un capteur SCD4x pour mesurer le CO₂, la température et 
 ### **Configuration LoRaWAN**
 
 - Les paramètres de configuration LoRaWAN, comme les clés d'accès ou le port d'application, sont définis dans le fichier `mbed_app.json`.
-- La fréquence d'envoi est contrôlée par la constante `TX_TIMER`.
 
 ### **Structure des messages**
 
