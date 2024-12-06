@@ -5,7 +5,7 @@
 
 #include "mbed.h"
 
-#include "inc/SCD4x_driver.hpp"
+#include "SCD4x_driver.hpp"
 #include "lorawan/LoRaWANInterface.h"
 #include "lorawan/system/lorawan_data_structures.h"
 #include "events/EventQueue.h"

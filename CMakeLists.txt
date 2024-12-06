@@ -14,13 +14,13 @@ add_executable(${APP_TARGET})
 
 target_sources(${APP_TARGET}
     PRIVATE
-        main.cpp
-        src/SCD4x_driver.cpp # Add SensorDriver.cpp to the compilation sources
+        src/src/main.cpp
+        src/driver/src/SCD4x_driver.cpp # Add SensorDriver.cpp to the compilation sources
 )
 
 target_include_directories(${APP_TARGET}
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/inc # Ensure the compiler can find SensorDriver.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/include # Ensure the compiler can find SensorDriver.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/mbed_6tron-courses_lorawan
 )
 
