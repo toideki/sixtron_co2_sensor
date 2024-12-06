@@ -21,6 +21,7 @@ target_sources(${APP_TARGET}
 target_include_directories(${APP_TARGET}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/inc # Ensure the compiler can find SensorDriver.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/mbed_6tron-courses_lorawan
 )
 
 target_link_libraries(${APP_TARGET}

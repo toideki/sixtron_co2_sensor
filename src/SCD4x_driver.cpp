@@ -3,9 +3,14 @@
 SCD4x_driver::SCD4x_driver(PinName sda, PinName scl, int address)
     : i2c(sda, scl), i2c_address(address << 1), co2(0), temp(0), humid(0) {}
 
-void SCD4x_driver::startMeasurement() {
+int SCD4x_driver::startMeasurement() {
     char start_period_cmd[2] = {0x21, 0xB1};
-    i2c.write(i2c_address, start_period_cmd, 2, false);
+    return i2c.write(i2c_address, start_period_cmd, 2, false);
+}
+
+int  SCD4x_driver::stopMeasurement() {
+    char start_period_cmd[2] = {0x3F, 0x86};
+    return i2c.write(i2c_address, start_period_cmd, 2, false);
 }
 
 int SCD4x_driver::readData() {
