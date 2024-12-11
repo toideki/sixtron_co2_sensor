@@ -427,9 +427,11 @@ Cet exercice combine un capteur SCD4x pour mesurer le CO₂, la température et 
 
     Résultat du programme après avoir soufflé dessus :
 
+    ![7jR4HQ2-](https://github.com/user-attachments/assets/3e9e4f2d-85d2-4f2f-ae14-ae78ff90efb3)
 
     Résultat précédent sans avoir soufflé dessus (capture d'écran prise un jour différent):
 
+    ![image](https://github.com/user-attachments/assets/593c8e26-199c-4b46-8417-3756f2884e55)
 
 
 
